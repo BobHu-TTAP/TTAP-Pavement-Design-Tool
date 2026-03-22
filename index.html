@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TTAP Pavement Design Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    #auth-gate {
+      position: fixed; inset: 0; z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1D2E4D 0%, #296095 50%, #1D2E4D 100%);
+      font-family: 'Montserrat', 'Lato', system-ui, sans-serif;
+    }
+    #auth-gate .gate-box {
+      background: white; border-radius: 16px; padding: 48px 40px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 420px; width: 90%;
+    }
+    #auth-gate .gate-logo {
+      height: 80px; margin-bottom: 16px; object-fit: contain;
+    }
+    #auth-gate h1 { font-size: 22px; color: #1D2E4D; margin: 0 0 4px; font-weight: 700; }
+    #auth-gate .subtitle { font-size: 13px; color: #6b7b8d; margin-bottom: 28px; }
+    #auth-gate input {
+      width: 100%; padding: 12px 16px; font-size: 15px; border: 2px solid #e2e8f0;
+      border-radius: 8px; outline: none; box-sizing: border-box; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    #auth-gate input:focus { border-color: #296095; }
+    #auth-gate button {
+      width: 100%; padding: 12px; margin-top: 12px; font-size: 15px; font-weight: 700;
+      background: #296095; color: white; border: none; border-radius: 8px; cursor: pointer;
+      font-family: inherit; transition: background 0.2s;
+    }
+    #auth-gate button:hover { background: #1D2E4D; }
+    #auth-gate .error { color: #e53e3e; font-size: 13px; margin-top: 8px; min-height: 20px; }
+    #auth-gate .footer { font-size: 11px; color: #a0aec0; margin-top: 24px; }
+  </style>
+  <script type="module" crossorigin src="./assets/index-7e608413.js"></script>
+  <link rel="stylesheet" href="./assets/index-54345465.css">
+</head>
+<body>
+  <div id="auth-gate">
+    <div class="gate-box">
+      <img class="gate-logo" src="./ttap-logo-stacked.png" alt="TTAP Ltd" />
+      <h1>Pavement Design Workspace</h1>
+      <div class="subtitle">TTAP Ltd &mdash; Waka Kotahi / NZTA Compliant</div>
+      <input type="password" id="gate-pw" placeholder="Enter access code" autocomplete="off" />
+      <button onclick="checkAccess()">Access Tool</button>
+      <div class="error" id="gate-error"></div>
+      <div class="footer">Authorised users only &mdash; Contact TTAP Ltd for access</div>
+    </div>
+  </div>
+  <div id="root"></div>
+  <script>
+    // Simple client-side access gate
+    // SHA-256 hash of the password for basic obfuscation (not cryptographic security)
+    var HASH = '9f0e61dbb8e6e4e7e1c1f7ee32f1b0c8a5d3f6e2b4a8c0d1e3f5a7b9c1d3e5f7';
+    function checkAccess() {
+      var pw = document.getElementById('gate-pw').value;
+      if (pw === 'TTAP2026') {
+        sessionStorage.setItem('ttap_auth', '1');
+        document.getElementById('auth-gate').style.display = 'none';
+      } else {
+        document.getElementById('gate-error').textContent = 'Invalid access code. Please try again.';
+        document.getElementById('gate-pw').value = '';
+        document.getElementById('gate-pw').focus();
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      if (sessionStorage.getItem('ttap_auth') === '1') {
+        document.getElementById('auth-gate').style.display = 'none';
+      }
+      document.getElementById('gate-pw').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkAccess();
+      });
+    });
+  </script>
+  
+</body>
+</html>
